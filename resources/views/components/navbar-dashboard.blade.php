@@ -499,15 +499,113 @@
 
         <ul class="p-2 text-start text-sm font-medium text-gray-900 dark:text-white">
           <li>
-            <a href="#" title="" class="group flex items-center gap-2 rounded-md px-3 py-2 text-sm text-red-600 hover:bg-red-50 dark:text-red-500 dark:hover:bg-gray-600">
-              <svg class="h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H8m12 0-4 4m4-4-4-4M9 4H7a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h2"></path>
-              </svg>
-              {{ __('Logout') }}
+            <a href="#" data-modal-target="logoutModal" data-modal-toggle="logoutModal" class="group flex items-center gap-2 rounded-md px-3 py-2 text-sm text-red-600 hover:bg-red-50 dark:text-red-500 dark:hover:bg-gray-600">
+                <svg class="h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H8m12 0-4 4m4-4-4-4M9 4H7a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h2"></path>
+                </svg>
+                {{ __('Logout') }}
             </a>
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
+              @csrf
+            </form>
           </li>
         </ul>
       </div>
     </div>
   </div>
 </nav>
+
+<!-- modal de logout -->
+<div id="logoutModal" tabindex="-1" aria-hidden="true" class="fixed left-0 right-0 top-0 z-50 hidden h-[calc(100%-1rem)] max-h-full w-full items-center justify-center overflow-y-auto overflow-x-hidden md:inset-0">
+  <div class="relative max-h-full w-full max-w-md p-4">
+    <!-- Modal content -->
+    <div class="relative rounded-lg bg-white p-4 shadow-sm dark:bg-gray-800 sm:p-5">
+      <button
+        type="button"
+        class="absolute end-2.5 top-2.5 me-auto inline-flex items-center rounded-lg bg-transparent p-1.5 text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-600 dark:hover:text-white"
+        data-modal-toggle="logoutModal"
+      >
+      <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18 17.94 6M18 18 6.06 6"/>
+      </svg>
+      
+        <span class="sr-only">Close modal</span>
+      </button>
+      <h3 class="mb-1 text-lg font-semibold text-gray-900 dark:text-white">{{ env('APP_NAME') }} - {{ __('Logout') }}</h3>
+      <p class="mb-4 text-gray-500 dark:text-gray-400">{{ __('Are you sure you want to logout?')}}</p>
+      <div class="flex items-center space-x-4">
+        <button
+          id="logout-confirm-btn"
+          type="submit"
+          class="inline-flex items-center rounded-lg bg-red-600 px-3 py-2 text-center text-sm font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-4 focus:ring-red-300 dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-900"
+          onclick="document.getElementById('logout-form').submit();"
+        >
+          <svg class="w-5 h-5 text-gray-800 dark:text-white mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+            <path fill-rule="evenodd" d="M15.03 9.684h3.965c.322 0 .64.08.925.232.286.153.532.374.717.645a2.109 2.109 0 0 1 .242 1.883l-2.36 7.201c-.288.814-.48 1.355-1.884 1.355-2.072 0-4.276-.677-6.157-1.256-.472-.145-.924-.284-1.348-.404h-.115V9.478a25.485 25.485 0 0 0 4.238-5.514 1.8 1.8 0 0 1 .901-.83 1.74 1.74 0 0 1 1.21-.048c.396.13.736.397.96.757.225.36.32.788.269 1.211l-1.562 4.63ZM4.177 10H7v8a2 2 0 1 1-4 0v-6.823C3 10.527 3.527 10 4.176 10Z" clip-rule="evenodd"/>
+          </svg>
+          {{ __('Logout') }}
+        </button>
+        <button
+          data-modal-toggle="logoutModal"
+          type="button"
+          class="flex w-full items-center justify-center rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-700 sm:w-auto"
+        >
+          {{ __('Cancel') }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.getElementById('logout-confirm-btn').addEventListener('click', function () {
+    const button = this;
+
+    // Substitui conteúdo do botão por spinner + texto
+    button.innerHTML = `
+        <svg aria-hidden="true" role="status"
+             class="inline w-4 h-4 mr-2 text-white animate-spin"
+             viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M100 50.5908C100 78.2051 77.6142 100.591
+                50 100.591C22.3858 100.591 0 78.2051 0
+                50.5908C0 22.9766 22.3858 0.59082 50
+                0.59082C77.6142 0.59082 100 22.9766
+                100 50.5908ZM9.08144 50.5908C9.08144
+                73.1895 27.4013 91.5094 50
+                91.5094C72.5987 91.5094 90.9186
+                73.1895 90.9186 50.5908C90.9186
+                27.9921 72.5987 9.67226 50
+                9.67226C27.4013 9.67226 9.08144
+                27.9921 9.08144 50.5908Z"
+                fill="#E5E7EB" />
+            <path d="M93.9676 39.0409C96.393
+                38.4038 97.8624 35.9116 97.0079
+                33.5539C95.2932 28.8227 92.871
+                24.3692 89.8167 20.348C85.8452
+                15.1192 80.8826 10.7238 75.2124
+                7.41289C69.5422 4.10194 63.2754
+                1.94025 56.7698 1.05124C51.7666
+                0.367541 46.6976 0.446843 41.7345
+                1.27873C39.2613 1.69328 37.813
+                4.19778 38.4501 6.62326C39.0873
+                9.04874 41.5694 10.4717 44.0505
+                10.1071C47.8511 9.54855 51.7191
+                9.52689 55.5402 10.0491C60.8642
+                10.7766 65.9928 12.5457 70.6331
+                15.2552C75.2735 17.9648 79.3347
+                21.5619 82.5849 25.841C84.9175
+                28.9121 86.7997 32.2913 88.1811
+                35.8758C89.083 38.2158 91.5421
+                39.6781 93.9676 39.0409Z"
+                fill="currentColor" />
+        </svg>
+        Saindo...
+    `;
+
+    button.disabled = true;
+
+    // Envia o formulário
+    document.getElementById('logout-form').submit();
+});
+</script>
+<!-- modal de logout -->
